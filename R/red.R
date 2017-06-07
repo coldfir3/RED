@@ -15,14 +15,20 @@
 #' x <- RED(y, sigma = 1, lambda = 5, mu = 0.1, 'DN', niter = 10)
 #' par(mfrow = c(1,2), mar = c(0,0,2,0)+0.1)
 #' plot(y, interp = FALSE, axes = FALSE, main = 'Degraded Lenna')
-#' mtext(MSE(y, lenna), side = 1, line = -2)
+#' mtext(paste(round(PSNR(lenna, y),2), 'dB'), side = 1, line = -2)
 #' plot(x, interp = FALSE, axes = FALSE, main = 'Restored Lenna')
-#' mtext(MSE(x, lenna), side = 1, line = -2)
+#' mtext(paste(round(PSNR(lenna, x),2), 'dB'), side = 1, line = -2)
+#'
+#' y <- degrade(cameraman, noise = 0.005, blur = 9)
+#' y <- isoblur(cameraman, sigma = 3) + rnorm(prod(dim(cameraman)),0,0.005)
+#' x <- RED(y, sigma = 0.35, lambda = 6, mu = 0.2, 'DB', niter = 30)
+#' par(mfrow = c(1,2), mar = c(0,0,2,0)+0.1)
+#' plot(y, interp = FALSE, axes = FALSE, main = 'Degraded cameraman')
+#' mtext(paste(round(PSNR(cameraman, y),2), 'dB'), side = 1, line = -2)
+#' plot(x, interp = FALSE, axes = FALSE, main = 'Restored cameraman')
+#' mtext(paste(round(PSNR(cameraman, x),2), 'dB'), side = 1, line = -2)
 #'
 RED <- function(y, lambda, sigma, mu = NULL, functional = 'SR', engine = 'MF', niter = 50, args = NULL){
-
-#  sigma <- sigma * 255
-#  y <- y * 255
 
   f <- NULL
 
@@ -74,6 +80,22 @@ RED <- function(y, lambda, sigma, mu = NULL, functional = 'SR', engine = 'MF', n
     x <- y
   }
 
+  if (functional == 'DB'){
+    if (is.null(args$filter)){
+      args$filter <- imfill(9, 9, val = 1/9^2)
+      #grid <- seq(-5,5,1)
+      #h <- pnorm(grid + 0.5) - pnorm(grid - 0.5)
+      #h <- expand.grid(h, h)
+      #h <- apply(h, 1, prod)
+      #args$filter <- cimg(array(h, c(11,11,1,1)))
+      }
+    #f$H <- function(im) return(fft_convolve(im, args$filter))
+    f$H <- function(im) return(isoblur(im, sigma = 3))
+    #f$HT <- function(im) return(fft_convolve(im, args$filter))
+    f$HT <- function(im) return(isoblur(im, sigma = 3))
+    x <- y
+  }
+
   N <- prod(dim(x))
 
   if(is.null(mu))
@@ -90,7 +112,7 @@ RED <- function(y, lambda, sigma, mu = NULL, functional = 'SR', engine = 'MF', n
     #x <- x - mu*zero.outliers(grad)
     x <- x - mu*grad
     cat(loss/N,'\n')
-#    plotOR(x, q = c(0,1), interp = F)
+#    plot(x, interp = F)
 
   }
 
@@ -209,30 +231,4 @@ if(F){
   display(as.imlist(x))
 }
 
-### deconvolução!!!! PORRAAA FILHA DA PUTAAA FOIII!!!!!
-if(F){
-  filter <- imfill(9,9,val = 1)
-  filter <- filter/sum(filter)
-  im <- im0 <- lenna
 
-  ffilter <- pad(filter, 1, 'xy', 1)
-  ffilter <-pad(ffilter, nrow(im)-10, 'xy', 0)
-  fft.filter <- FFT(ffilter)
-  fft.filter <- fft.filter$real + fft.filter$imag*1i
-  fft.im <- FFT(im)
-  fft.im <- fft.im$real + fft.im$imag*1i
-  fft.conv <- fft.filter * fft.im
-  conv <- FFT(Re(fft.conv), Im(fft.conv), inverse = TRUE)$real
-  conv <- imappend(imsplit(imappend(imsplit(conv, 'x', 2)[2:1], 'x'), 'y', 2)[2:1], 'y')
-  plot(conv, interp = FALSE)
-  plot(convolve(im, filter), interp = FALSE)
-
-  im <- conv
-  fft.im <- FFT(im)
-  fft.im <- fft.im$real + fft.im$imag*1i
-  fft.deconv <- fft.im / fft.filter
-  deconv <- FFT(Re(fft.deconv), Im(fft.deconv), inverse = TRUE)$real
-  deconv <- imappend(imsplit(imappend(imsplit(deconv, 'x', 2)[2:1], 'x'), 'y', 2)[2:1], 'y')
-  plot(deconv, interp = FALSE)
-  plot(im0, interp = FALSE)
-}

@@ -4,11 +4,14 @@
 \alias{error}
 \alias{MSE}
 \alias{MAE}
+\alias{PSNR}
 \title{Error measurements of images}
 \usage{
 MSE(x, y = NULL)
 
 MAE(x, y = NULL)
+
+PSNR(x, y)
 }
 \arguments{
 \item{x, y}{\code{cimg} objects}
@@ -21,12 +24,15 @@ This function calculates error between two images
 \item \code{MSE}: Mean Squared Error
 
 \item \code{MAE}: Mean Absolute Error
+
+\item \code{PSNR}: Peak Signal-to-Noise Ratio
 }}
 
 \examples{
 degraded.lenna <- degrade(lenna, noise = 0.05)
 MSE(lenna, degraded.lenna)
 MAE(lenna, degraded.lenna)
+PSNR(lenna, degraded.lenna)
 #alternatively it can be done like:
 MSE(lenna - degraded.lenna)
 MAE(lenna - degraded.lenna)
