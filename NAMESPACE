@@ -2,8 +2,10 @@
 
 export(MAE)
 export(MSE)
+export(PSNR)
 export(RED)
 export(degrade)
+export(fft_convolve)
 export(resample)
 export(shift)
 import(imager)

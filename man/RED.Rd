@@ -31,8 +31,16 @@ y <- degrade(lenna, noise = 0.05)
 x <- RED(y, sigma = 1, lambda = 5, mu = 0.1, 'DN', niter = 10)
 par(mfrow = c(1,2), mar = c(0,0,2,0)+0.1)
 plot(y, interp = FALSE, axes = FALSE, main = 'Degraded Lenna')
-mtext(MSE(y, lenna), side = 1, line = -2)
+mtext(paste(round(PSNR(lenna, y),2), 'dB'), side = 1, line = -2)
 plot(x, interp = FALSE, axes = FALSE, main = 'Restored Lenna')
-mtext(MSE(x, lenna), side = 1, line = -2)
+mtext(paste(round(PSNR(lenna, x),2), 'dB'), side = 1, line = -2)
+
+y <- degrade(lenna, noise = 0.05, blur = 9)
+x <- RED(y, sigma = 1, lambda = 5, mu = 0.1, 'DB', niter = 10)
+par(mfrow = c(1,2), mar = c(0,0,2,0)+0.1)
+plot(y, interp = FALSE, axes = FALSE, main = 'Degraded Lenna')
+mtext(paste(round(PSNR(lenna, y),2), 'dB'), side = 1, line = -2)
+plot(x, interp = FALSE, axes = FALSE, main = 'Restored Lenna')
+mtext(paste(round(PSNR(lenna, x),2), 'dB'), side = 1, line = -2)
 
 }

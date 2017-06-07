@@ -8,9 +8,11 @@
 #' degraded.lenna <- degrade(lenna, noise = 0.05)
 #' MSE(lenna, degraded.lenna)
 #' MAE(lenna, degraded.lenna)
+#' PSNR(lenna, degraded.lenna)
 #' #alternatively it can be done like:
 #' MSE(lenna - degraded.lenna)
 #' MAE(lenna - degraded.lenna)
+
 #' @name error
 NULL
 
@@ -32,4 +34,10 @@ MAE <- function(x, y = NULL){
     return(mean(abs(x)))
   else
     return(mean(abs(x - y)))
+}
+
+#' @export
+#' @describeIn error Peak Signal-to-Noise Ratio
+PSNR <- function(x, y){
+  20*log10(max(x)) - 10*log10(MSE(x, y))
 }
