@@ -1,0 +1,132 @@
+### re-implement taylor registration with multiple blocks
+#split into blocks
+# im <- imappend(imsplit(imappend(imsplit(cameraman, 'x', 16), 'z'), 'y', 16), 'c')
+# restored.im <- imappend(imsplit(imappend(imsplit(im, 'c', 16), 'y'), 'z'), 'x')
+# to register split all into 'z' or a list or use apply(im, c(3,4), fun)
+# to transform an image given the registration params use array(apply(im, c(3,4), fun), c(16,16,16,16))
+
+
+#devtools::use_package('abind')
+#' TSS Registration routine
+#'
+#' This algorithms finds the two registration parameters. The search scheme is the Three Step Search
+#'
+#' It is one of the earliest fast block matching algorithm. It runs as follows:
+#'    1. Start with search location at center
+#'    2. Set step size ‘S’ = 4 and search parameter ‘p’ = 7
+#'    3. Search 16 pixels around location (0,0) and the location (0,0)
+#'    4. Pick among the 9 locations searched, the one with minimum cost function
+#'    5. Set the new search origin to the above picked location
+#'    6. Set the new step size as S = S/2
+#'    7. Repeat the search procedure until S = 1
+#'
+#' @param z cimg object with the high res frame
+#' @param y cimg object with the low res frame
+#' @param S0 numeric indicating the search parameter
+#'
+#' @export
+#' @examples
+#' s <- rbind(c(1,4),c(-1,-1),c(-5,1))
+#' y.lenna <- degrade(lenna, L = 4, s = s)
+TSS <- function(z, y, S0 = 4){ ## melhorar o algoritmo de otimização
+
+  p <- dim(y)[3]
+  L <- dim(z)/dim(y)
+  L1 <- L[1]
+  L2 <- L[2]
+
+  cat("\nDetermining", p, "registration parameters:\n")
+  pb <- utils::txtProgressBar(min = 0, max = p, style = 3, width = p+1)
+  par <- NULL
+  s.hist <- NULL
+  y.hist <- NULL
+  xc <- yc <- 0
+  for(i in 1:p){
+    S <- S0
+    while(S >= 1){
+      s <-  unique(data.frame(
+        dx=c(seq(-S, S, 1) + xc, rep(xc, 2*S + 1)),
+        dy=c(rep(yc, 2*S + 1), seq(-S, S, 1) + yc))
+      )
+      if(!is.null(s.hist))
+        s <- unique(rbind(s.hist,s))[-(1:nrow(s.hist)),]
+      ydeg <- degrade(z, L1 = L1, L2 = L2, s = s, sd_noise = 0)
+#      y.hist <- as.cimg(abind::abind(y.hist, ydeg, along = 3))
+      s.hist <- rbind(s.hist, s)
+      mse.hist <- apply(y.hist[,,,1], 3, MSE, im2 = y[,,i,])
+      xc <- s.hist[which.min(mse.hist),1]
+      yc <- s.hist[which.min(mse.hist),2]
+      S <- S/2
+    }
+    par <- rbind(par, cbind(xc, yc))
+    utils::setTxtProgressBar(pb, i)
+  }
+  return(par)
+}
+
+#' bla bla
+#'
+#' @export
+#' @param src,tar cimg objects
+#' @param control list to control the parameters of the optimization routine
+#' @param method character indicating the method to be used
+#' @param ran numeric vector for the range around par0 for lower and upper (when not provided)
+#' @param par0 numeric vector for the initial guess for the registration parameters
+#' @param lower,upper numeric vector for the bounds of the optimization problem
+#' @param verbosity Numeric indicating the level of verbosity is displayed
+#' @return bla bla
+register <- function(src, tar, method = 'taylor', par0 = c(0,0), verbosity = 2, two_way_avg = FALSE){
+
+  par <- reg.taylor(src, tar, par0 = par0, verbosity = verbosity)
+
+  return(par)
+}
+
+reg.taylor <- function(src, tar, par0 = c(0,0), maxiter = 50, tol = 1e-3, max_parit = 1, allow.rotation = FALSE, verbosity = 2){
+
+  par.acc <- par <- par0
+  src.ori <- src
+  tar.ori <- tar
+
+  if (allow.rotation)
+    stop("registration with rotation not yet correclty implemented")
+  if(verbosity > 1)
+    cat("\nDetermining registration parameters by Taylor series:\n")
+  if(verbosity > 1)
+    cat("iteration number:", 0,"\t| Par:", round(par.acc,3), '\tMSE:', NA, '\n')
+  for (i in 1:maxiter){
+
+    tar <- tar.ori
+    tar[which(src == 0)] <- 0
+
+
+    dif <- tar - src
+    src_g <- imager::imgradient(src, "xy")
+
+    A11 <- sum(src_g$x^2)
+    A12 <- A21 <- sum(src_g$x * src_g$y)
+    A22 <- sum(src_g$y^2)
+
+    A <- matrix(c(A11, A21, A12, A22), nrow = 2)
+    b <- c(sum(src_g$x * dif), sum(src_g$y * dif))
+
+    par <- - solve(A, b)
+    #    par[par > +max_parit] <- +max_parit
+    #    par[par < -max_parit] <- -max_parit
+    par.acc <- par.acc + par
+
+    #    src <- transform(src, par, method = 'taylor')
+    src <- transform(src.ori, par.acc, method = 'taylor')
+
+    err <- mean((src - tar)^2)
+
+    if (i %in% round(2^seq(0, log2(maxiter), length.out = 6)) & verbosity > 1)
+      cat("iteration number:", i,"\t| Par:", round(par.acc,3), '\tMSE:', round(err, 3), '\n')
+
+    if (max(abs(par)) < tol)
+      break
+  }
+  if(verbosity > 0)
+    cat("iteration number:", i,"\t| Par:", round(par.acc,3), '\tMSE:', round(err, 3), '(FINAL)\n')
+  return(par.acc)
+}
