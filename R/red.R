@@ -19,6 +19,7 @@
 #' plot(x, interp = FALSE, axes = FALSE, main = 'Restored Lenna')
 #' mtext(paste(round(PSNR(lenna, x),2), 'dB'), side = 1, line = -2)
 #'
+<<<<<<< HEAD
 #' y <- degrade(cameraman, noise = 0.005, blur = 9)
 #' y <- isoblur(cameraman, sigma = 3) + rnorm(prod(dim(cameraman)),0,0.005)
 #' x <- RED(y, sigma = 0.35, lambda = 6, mu = 0.2, 'DB', niter = 30)
@@ -27,6 +28,15 @@
 #' mtext(paste(round(PSNR(cameraman, y),2), 'dB'), side = 1, line = -2)
 #' plot(x, interp = FALSE, axes = FALSE, main = 'Restored cameraman')
 #' mtext(paste(round(PSNR(cameraman, x),2), 'dB'), side = 1, line = -2)
+=======
+#' y <- degrade(lenna, noise = 0, blur = 9)
+#' x <- RED(y, sigma = 50, lambda = 1, mu = 0.1, 'DB', niter = 10)
+#' par(mfrow = c(1,2), mar = c(0,0,2,0)+0.1)
+#' plot(y, interp = FALSE, axes = FALSE, main = 'Degraded Lenna')
+#' mtext(paste(round(PSNR(lenna, y),2), 'dB'), side = 1, line = -2)
+#' plot(x, interp = FALSE, axes = FALSE, main = 'Restored Lenna')
+#' mtext(paste(round(PSNR(lenna, x),2), 'dB'), side = 1, line = -2)
+>>>>>>> 372bca0d51ec7151432dc51b6bdb4bf0628d82dd
 #'
 RED <- function(y, lambda, sigma, mu = NULL, functional = 'SR', engine = 'MF', niter = 50, args = NULL){
 
@@ -81,6 +91,7 @@ RED <- function(y, lambda, sigma, mu = NULL, functional = 'SR', engine = 'MF', n
   }
 
   if (functional == 'DB'){
+<<<<<<< HEAD
     if (is.null(args$filter)){
       args$filter <- imfill(9, 9, val = 1/9^2)
       #grid <- seq(-5,5,1)
@@ -93,6 +104,12 @@ RED <- function(y, lambda, sigma, mu = NULL, functional = 'SR', engine = 'MF', n
     f$H <- function(im) return(isoblur(im, sigma = 3))
     #f$HT <- function(im) return(fft_convolve(im, args$filter))
     f$HT <- function(im) return(isoblur(im, sigma = 3))
+=======
+    if (is.null(args$filter))
+      args$filter <- imfill(9, 9, val = 1/9^2)
+    f$H <- function(im) return(fft_convolve(im, args$filter))
+    f$HT <- function(im) return(fft_convolve(im, args$filter, TRUE))
+>>>>>>> 372bca0d51ec7151432dc51b6bdb4bf0628d82dd
     x <- y
   }
 

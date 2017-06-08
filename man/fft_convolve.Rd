@@ -8,8 +8,11 @@ fft_convolve(im, filter, deconvolution = FALSE)
 }
 \arguments{
 \item{im, filter}{cimg objects}
+<<<<<<< HEAD
 
 \item{deconvolution}{logical indicatinf if the deconvolution should be performed}
+=======
+>>>>>>> 372bca0d51ec7151432dc51b6bdb4bf0628d82dd
 }
 \description{
 Convolution of two images via FFT
@@ -17,8 +20,13 @@ Convolution of two images via FFT
 \examples{
 im <- lenna
 filter <- imfill(9,9,val = 1)
+<<<<<<< HEAD
 blurred.im <- fft_convolve(im, filter)
 deblurred.im <- fft_convolve(blurred.im, filter, deconvolution = TRUE)
+=======
+blurred.im <- fft_conv(im, filter)
+deblurred.im <- fft_conv(blurred.im, filter, deconvolution = TRUE)
+>>>>>>> 372bca0d51ec7151432dc51b6bdb4bf0628d82dd
 par(mfrow = c(1,3), mar = c(0,0,1,0)+0.1)
 plot(im, axes = FALSE, interp = FALSE, main = 'Original Lenna')
 plot(blurred.im, axes = FALSE, interp = FALSE, main = 'Blurred Lenna')
