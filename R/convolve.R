@@ -1,54 +1,14 @@
-<<<<<<< HEAD
 #' Convolution of two images via FFT
 #'
 #' @param im,filter cimg objects
 #' @param deconvolution logical indicatinf if the deconvolution should be performed
-=======
-### deconvolução!!!! PORRAAA FILHA DA PUTAAA FOIII!!!!!
-if(F){
-  filter <- imfill(9,9,val = 1)
-  filter <- filter/sum(filter)
-  im <- im0 <- lenna
-
-  ffilter <- pad(filter, 1, 'xy', 1)
-  ffilter <-pad(ffilter, nrow(im)-10, 'xy', 0)
-  fft.filter <- FFT(ffilter)
-  fft.filter <- fft.filter$real + fft.filter$imag*1i
-  fft.im <- FFT(im)
-  fft.im <- fft.im$real + fft.im$imag*1i
-  fft.conv <- fft.filter * fft.im
-  conv <- FFT(Re(fft.conv), Im(fft.conv), inverse = TRUE)$real
-  conv <- imappend(imsplit(imappend(imsplit(conv, 'x', 2)[2:1], 'x'), 'y', 2)[2:1], 'y')
-  plot(conv, interp = FALSE)
-  plot(convolve(im, filter), interp = FALSE)
-
-  im <- conv
-  fft.im <- FFT(im)
-  fft.im <- fft.im$real + fft.im$imag*1i
-  fft.deconv <- fft.im / fft.filter
-  deconv <- FFT(Re(fft.deconv), Im(fft.deconv), inverse = TRUE)$real
-  deconv <- imappend(imsplit(imappend(imsplit(deconv, 'x', 2)[2:1], 'x'), 'y', 2)[2:1], 'y')
-  plot(deconv, interp = FALSE)
-  plot(im0, interp = FALSE)
-}
-
-
-#' Convolution of two images via FFT
-#'
-#' @param im,filter cimg objects
->>>>>>> 372bca0d51ec7151432dc51b6bdb4bf0628d82dd
 #'
 #' @export
 #' @examples
 #' im <- lenna
 #' filter <- imfill(9,9,val = 1)
-<<<<<<< HEAD
 #' blurred.im <- fft_convolve(im, filter)
 #' deblurred.im <- fft_convolve(blurred.im, filter, deconvolution = TRUE)
-=======
-#' blurred.im <- fft_conv(im, filter)
-#' deblurred.im <- fft_conv(blurred.im, filter, deconvolution = TRUE)
->>>>>>> 372bca0d51ec7151432dc51b6bdb4bf0628d82dd
 #' par(mfrow = c(1,3), mar = c(0,0,1,0)+0.1)
 #' plot(im, axes = FALSE, interp = FALSE, main = 'Original Lenna')
 #' plot(blurred.im, axes = FALSE, interp = FALSE, main = 'Blurred Lenna')
@@ -74,24 +34,16 @@ fft_convolve <- function(im, filter, deconvolution = FALSE){
 #  filter <- imager::pad(filter, 2*dfi, 'xy')
 #  im <- imager::pad(im, 2*dfi, 'xy')
 
-<<<<<<< HEAD
   im <- stats ::fft(im)
   filter <- stats ::fft(filter)
-=======
-  im <- fft(im)
-  filter <- fft(filter)
->>>>>>> 372bca0d51ec7151432dc51b6bdb4bf0628d82dd
 
   if(deconvolution){
     res <- im / filter #https://en.wikipedia.org/wiki/Wiener_deconvolution ??? flip kernel???
   }
   else
     res <- im * filter
-<<<<<<< HEAD
+
   res <- stats ::fft(res, inverse = TRUE) / length(res)
-=======
-  res <- fft(res, inverse = TRUE) / length(res)
->>>>>>> 372bca0d51ec7151432dc51b6bdb4bf0628d82dd
   res <- Re(res)
   res <- imappend(imsplit(res, 'x', 2)[2:1], 'x')
   res <- imappend(imsplit(res, 'y', 2)[2:1], 'y')

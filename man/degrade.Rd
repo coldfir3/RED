@@ -32,7 +32,7 @@ This function degrades a high resolution image into a low resolution
 image. The degradation folows this: bla bla bla
 }
 \examples{
-degraded.lenna <- degrade(lenna, L = 4, noise = 0.05, blur = 9)
+degraded.lenna <- degrade(lenna, L = 4, noise = 0.05, blur = 3)
 par(mfrow = c(1,2), mar = c(0,0,1,0)+0.1)
 plot(lenna, axes = FALSE, interp = FALSE, main = 'Original Lenna')
 plot(degraded.lenna, axes = FALSE, interp = FALSE, main = 'Degraded Lenna')

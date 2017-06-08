@@ -14,7 +14,7 @@
 #' @return A degraded cimg object
 #'
 #' @examples
-#' degraded.lenna <- degrade(lenna, L = 4, noise = 0.05, blur = 9)
+#' degraded.lenna <- degrade(lenna, L = 4, noise = 0.05, blur = 3)
 #' par(mfrow = c(1,2), mar = c(0,0,1,0)+0.1)
 #' plot(lenna, axes = FALSE, interp = FALSE, main = 'Original Lenna')
 #' plot(degraded.lenna, axes = FALSE, interp = FALSE, main = 'Degraded Lenna')
@@ -41,7 +41,7 @@ degrade <- function(z, L = 1, s = c(0,0), noise = 0, blur = 1, L1 = L, L2 = L){
 
   y <- z
   y <- shift(y, s)
-  y <- convolve(y, blur)
+  y <- convolve(y, blur, dirichlet = TRUE)
   y <- resample(y, L1 = 1/L1, L2 = 1/L2)
   y <- y + noise
 

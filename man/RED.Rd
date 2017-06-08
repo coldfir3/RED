@@ -35,23 +35,17 @@ mtext(paste(round(PSNR(lenna, y),2), 'dB'), side = 1, line = -2)
 plot(x, interp = FALSE, axes = FALSE, main = 'Restored Lenna')
 mtext(paste(round(PSNR(lenna, x),2), 'dB'), side = 1, line = -2)
 
-<<<<<<< HEAD
-y <- degrade(cameraman, noise = 0.005, blur = 9)
-y <- isoblur(cameraman, sigma = 3) + rnorm(prod(dim(cameraman)),0,0.005)
-x <- RED(y, sigma = 0.35, lambda = 6, mu = 0.2, 'DB', niter = 30)
+y <- degrade(cameraman, blur = 9)
+x <- RED(y, sigma = 0.5, lambda = 4, mu = 0.2, 'DB', niter = 30)
 par(mfrow = c(1,2), mar = c(0,0,2,0)+0.1)
 plot(y, interp = FALSE, axes = FALSE, main = 'Degraded cameraman')
 mtext(paste(round(PSNR(cameraman, y),2), 'dB'), side = 1, line = -2)
 plot(x, interp = FALSE, axes = FALSE, main = 'Restored cameraman')
 mtext(paste(round(PSNR(cameraman, x),2), 'dB'), side = 1, line = -2)
-=======
-y <- degrade(lenna, noise = 0.05, blur = 9)
-x <- RED(y, sigma = 1, lambda = 5, mu = 0.1, 'DB', niter = 10)
-par(mfrow = c(1,2), mar = c(0,0,2,0)+0.1)
-plot(y, interp = FALSE, axes = FALSE, main = 'Degraded Lenna')
-mtext(paste(round(PSNR(lenna, y),2), 'dB'), side = 1, line = -2)
-plot(x, interp = FALSE, axes = FALSE, main = 'Restored Lenna')
-mtext(paste(round(PSNR(lenna, x),2), 'dB'), side = 1, line = -2)
->>>>>>> 372bca0d51ec7151432dc51b6bdb4bf0628d82dd
 
+im <- cameraman
+s <- cbind(c(0,1,2,-2,1), c(0,-1,2,1,-2))
+y <- as.cimg(array(apply(s, 1, function(s) degrade(im, L = 2, s = s)), c(dim(im)*c(0.5,0.5,5,1))))
+x <- RED(y, sigma = 0.5, lambda = 4, mu = 0.1, functional = 'SR', niter = 30, args = list(scale = 2, s=s))
+# y <- lapply(as.list(as.data.frame(t(s))), z = im, L = 2, s = s)
 }

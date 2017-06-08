@@ -11,33 +11,37 @@
 #' @export
 #' @examples
 #'
-#' y <- degrade(lenna, noise = 0.05)
+#' im <- lenna
+#' y <- degrade(im, noise = 0.05)
 #' x <- RED(y, sigma = 1, lambda = 5, mu = 0.1, 'DN', niter = 10)
 #' par(mfrow = c(1,2), mar = c(0,0,2,0)+0.1)
-#' plot(y, interp = FALSE, axes = FALSE, main = 'Degraded Lenna')
-#' mtext(paste(round(PSNR(lenna, y),2), 'dB'), side = 1, line = -2)
-#' plot(x, interp = FALSE, axes = FALSE, main = 'Restored Lenna')
-#' mtext(paste(round(PSNR(lenna, x),2), 'dB'), side = 1, line = -2)
+#' plot(y, interp = FALSE, axes = FALSE, main = 'Degraded im')
+#' mtext(paste(round(PSNR(im, y),2), 'dB'), side = 1, line = -2)
+#' plot(x, interp = FALSE, axes = FALSE, main = 'Restored im')
+#' mtext(paste(round(PSNR(im, x),2), 'dB'), side = 1, line = -2)
 #'
-<<<<<<< HEAD
-#' y <- degrade(cameraman, noise = 0.005, blur = 9)
-#' y <- isoblur(cameraman, sigma = 3) + rnorm(prod(dim(cameraman)),0,0.005)
-#' x <- RED(y, sigma = 0.35, lambda = 6, mu = 0.2, 'DB', niter = 30)
+#' im <- cameraman
+#' y <- degrade(im, blur = 9)
+#' x <- RED(y, sigma = 0.5, lambda = 4, mu = 0.2, 'DB', niter = 30)
 #' par(mfrow = c(1,2), mar = c(0,0,2,0)+0.1)
-#' plot(y, interp = FALSE, axes = FALSE, main = 'Degraded cameraman')
-#' mtext(paste(round(PSNR(cameraman, y),2), 'dB'), side = 1, line = -2)
-#' plot(x, interp = FALSE, axes = FALSE, main = 'Restored cameraman')
-#' mtext(paste(round(PSNR(cameraman, x),2), 'dB'), side = 1, line = -2)
-=======
-#' y <- degrade(lenna, noise = 0, blur = 9)
-#' x <- RED(y, sigma = 50, lambda = 1, mu = 0.1, 'DB', niter = 10)
-#' par(mfrow = c(1,2), mar = c(0,0,2,0)+0.1)
-#' plot(y, interp = FALSE, axes = FALSE, main = 'Degraded Lenna')
-#' mtext(paste(round(PSNR(lenna, y),2), 'dB'), side = 1, line = -2)
-#' plot(x, interp = FALSE, axes = FALSE, main = 'Restored Lenna')
-#' mtext(paste(round(PSNR(lenna, x),2), 'dB'), side = 1, line = -2)
->>>>>>> 372bca0d51ec7151432dc51b6bdb4bf0628d82dd
+#' plot(y, interp = FALSE, axes = FALSE, main = 'Degraded image')
+#' mtext(paste(round(PSNR(im, y),2), 'dB'), side = 1, line = -2)
+#' plot(x, interp = FALSE, axes = FALSE, main = 'Restored image')
+#' mtext(paste(round(PSNR(im, x),2), 'dB'), side = 1, line = -2)
 #'
+#' im <- cameraman
+#' L = 2
+#' s <- cbind(c(0,1,2,-2,1,3,-1,-3,-1), c(0,-1,2,1,-2,-3,3,-2,-3))
+#' y <- as.cimg(array(apply(s, 1, function(s) degrade(im, L = L, s = s, noise = 0.02)), c(dim(im)*c(1/L,1/L,nrow(s),1))))
+#' y1 <- resize(imsplit(y,'z')[[1]], -100*L, -100*L, interpolation_type = 5)
+#' x <- RED(y, sigma = 0.3, lambda = 2, mu = 0.1, functional = 'SR', niter = 30, args = list(scale = L, s=s))
+#' par(mfrow = c(1,2), mar = c(0,0,2,0)+0.1)
+#' plot(y1, interp = FALSE, axes = FALSE, main = 'Bicubic Interpolation')
+#' mtext(paste(round(PSNR(im, y1),2), 'dB'), side = 1, line = -2)
+#' plot(x, interp = FALSE, axes = FALSE, main = 'Super Resolved')
+#' mtext(paste(round(PSNR(im, x),2), 'dB'), side = 1, line = -2)
+
+
 RED <- function(y, lambda, sigma, mu = NULL, functional = 'SR', engine = 'MF', niter = 50, args = NULL){
 
   f <- NULL
@@ -51,11 +55,11 @@ RED <- function(y, lambda, sigma, mu = NULL, functional = 'SR', engine = 'MF', n
 
   if (functional == 'SR'){
     f$H <- function(im){ #transform HR_FRAME to LR_FRAME
-      im <- lapply(1:nrow(args$par), function(i){
+      im <- lapply(1:nrow(args$s), function(i){
         res <- im
         #res <- imager::imshift(res, par[i,1], par[i,2])
-        res <- shift(res, args$par[i,])
-        res <- imager::isoblur(res, args$sigma_blur)
+        res <- shift(res, args$s[i,])
+        #res <- imager::isoblur(res, args$sigma_blur)
         #res <- imager::resize(res, ncol(im)/args$scale, nrow(im)/args$scale, interpolation_type = 2, boundary_conditions = 1)
         res <- imager::resize(res, ncol(im)/args$scale, nrow(im)/args$scale, interpolation_type = 5)
         return(res)
@@ -68,13 +72,13 @@ RED <- function(y, lambda, sigma, mu = NULL, functional = 'SR', engine = 'MF', n
       im <- lapply(1:length(im), function(i){
         res <- im[[i]]
         #res <- imager::resize(res, ncol(im[[i]])*args$scale, nrow(im[[i]])*args$scale, interpolation_type = 2, boundary_conditions = 1)
-        res <- imager::resize(res, ncol(im[[i]])*args$scale, nrow(im[[i]])*args$scale, interpolation_type = 1)
-        res <- imager::imsharpen(res, args$amplitude, type = 'shock', alpha = 5, sigma = args$sigma_blur)
+        res <- imager::resize(res, ncol(res)*args$scale, nrow(res)*args$scale, interpolation_type = 1)
+        #res <- imager::imsharpen(res, args$amplitude, type = 'shock', alpha = 5, sigma = args$sigma_blur)
         #res <- imager::imshift(res, -par[i,1], -par[i,2])
-        res <- shift(res, -args$parpar[i,])
+        res <- shift(res, -args$s[i,])
         return(res)
       })
-      im <- average(as.imlist(im))
+      im <- parmed(as.imlist(im))
       return(im)
     }
     x <- f$HT(imsplit(y, 'z')[[1]])
@@ -91,7 +95,6 @@ RED <- function(y, lambda, sigma, mu = NULL, functional = 'SR', engine = 'MF', n
   }
 
   if (functional == 'DB'){
-<<<<<<< HEAD
     if (is.null(args$filter)){
       args$filter <- imfill(9, 9, val = 1/9^2)
       #grid <- seq(-5,5,1)
@@ -104,12 +107,6 @@ RED <- function(y, lambda, sigma, mu = NULL, functional = 'SR', engine = 'MF', n
     f$H <- function(im) return(isoblur(im, sigma = 3))
     #f$HT <- function(im) return(fft_convolve(im, args$filter))
     f$HT <- function(im) return(isoblur(im, sigma = 3))
-=======
-    if (is.null(args$filter))
-      args$filter <- imfill(9, 9, val = 1/9^2)
-    f$H <- function(im) return(fft_convolve(im, args$filter))
-    f$HT <- function(im) return(fft_convolve(im, args$filter, TRUE))
->>>>>>> 372bca0d51ec7151432dc51b6bdb4bf0628d82dd
     x <- y
   }
 
