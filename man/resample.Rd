@@ -7,15 +7,15 @@
 resample(im, L = 1, L1 = L, L2 = L)
 }
 \arguments{
-\item{im}{cigm obect}
+\item{im}{\code{cimg} object}
 
-\item{L}{numeric indicating the overal scale change. This param will be
-overided by L1 or L2}
+\item{L}{numeric indicating the overall scale change. This param will be
+override by L1 or L2}
 
 \item{L1, L2}{numeric indicating the directional scale change}
 }
 \value{
-A resampled cimg object
+A resampled \code{cimg} object
 }
 \description{
 Resampling of an image

@@ -10,7 +10,7 @@ shift(im, s)
 \item{im}{cimg object}
 
 \item{s}{numeric \code{p} by \code{2} matrix containing the registration
-sameters}
+parameters}
 }
 \value{
 shifted cimg object

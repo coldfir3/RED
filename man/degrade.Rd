@@ -8,16 +8,16 @@ degrade(z, L = 1, s = cbind(0, 0), noise = 0, blur = 1, L1 = L,
   L2 = L)
 }
 \arguments{
-\item{z}{a cimg object containing the high resolution image}
+\item{z}{a \code{cimg}object containing the high resolution image}
 
-\item{L}{numeric indicating the overal scale change. This param will be
-overided by L1 or L2}
+\item{L}{numeric indicating the overall scale change. This param will be
+override by L1 or L2}
 
 \item{s}{numeric \code{p} by \code{2} matrix containing the registration
-sameters}
+parameters}
 
 \item{noise}{numeric indicating the standard deviation of the noise or an
-cimg object that will be added to the resampled z}
+\code{cimg}object that will be added to the resampled z}
 
 \item{blur}{numeric indicating the blur range (for uniform blur) or an cimg
 object with the blur kernel to be convolved with z if nothing is provided
@@ -28,7 +28,7 @@ an default kernel will be used.}
 \item{L2}{numeric indicating the directional scale change}
 }
 \value{
-A degraded cimg object
+A degraded \code{cimg}object
 }
 \description{
 This function degrades a high resolution image into a low resolution image.

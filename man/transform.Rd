@@ -7,13 +7,13 @@
 transform(im, s)
 }
 \arguments{
-\item{im}{cimg object}
+\item{im}{\code{cimg} object}
 
 \item{s}{numeric \code{1} by \code{3} vector containing the registration
 sameters}
 }
 \value{
-shifted cimg object
+shifted \code{cimg} object
 }
 \description{
 Transform an image
