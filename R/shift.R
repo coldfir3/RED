@@ -2,7 +2,7 @@
 #'
 #' @param im cimg object
 #' @param s numeric \code{p} by \code{2} matrix containing the registration
-#'   sameters
+#'   parameters
 #'
 #' @return shifted cimg object
 #'

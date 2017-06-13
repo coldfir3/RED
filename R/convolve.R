@@ -1,6 +1,6 @@
 #' Convolution of two images via FFT
 #'
-#' @param im,filter cimg objects
+#' @param im,filter \code{cimg} objects
 #' @param deconvolution logical indicating if the deconvolution should be performed
 #'
 #' @export

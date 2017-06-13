@@ -1,11 +1,11 @@
 #' Resampling of an image
 #'
-#' @param im cigm obect
-#' @param L numeric indicating the overal scale change. This param will be
-#'   overided by L1 or L2
+#' @param im \code{cimg} object
+#' @param L numeric indicating the overall scale change. This param will be
+#'   override by L1 or L2
 #' @param L1,L2 numeric indicating the directional scale change
 #'
-#' @return A resampled cimg object
+#' @return A resampled \code{cimg} object
 #'
 #' @export
 #' @examples

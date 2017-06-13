@@ -2,16 +2,16 @@
 #'
 #' This function degrades a high resolution image into a low resolution image.
 #'
-#' @param z a cimg object containing the high resolution image
+#' @param z a \code{cimg}object containing the high resolution image
 #' @inheritParams resample
 #' @inheritParams shift
 #' @param noise numeric indicating the standard deviation of the noise or an
-#'   cimg object that will be added to the resampled z
+#'   \code{cimg}object that will be added to the resampled z
 #' @param blur numeric indicating the blur range (for uniform blur) or an cimg
 #'   object with the blur kernel to be convolved with z if nothing is provided
 #'   an default kernel will be used.
 #'
-#' @return A degraded cimg object
+#' @return A degraded \code{cimg}object
 #'
 #' @export
 #' @examples

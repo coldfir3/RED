@@ -3,6 +3,7 @@ Type: Package
 Title: REgularization by Denoising (RED)
 Version: 1.0.0
 Author: person("Adriano", "Passos", email="adriano.utfpr@gmail.com", role=c("aut","cre"))
+Maintainer: Adriano G Passos, email: adriano.utfpr@gmail.com
 Description: Regularization by Denoising uses a denoising engine to solve many image reconstruction ill-posed inverse problems.
 Depends: R (>= 3.4.0), imager
 License: GPL-3

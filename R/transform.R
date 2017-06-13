@@ -1,10 +1,10 @@
 #' Transform an image
 #'
-#' @param im cimg object
+#' @param im \code{cimg} object
 #' @param s numeric \code{1} by \code{3} vector containing the registration
 #'   sameters
 #'
-#' @return shifted cimg object
+#' @return shifted \code{cimg} object
 #'
 #' @export
 #' @examples

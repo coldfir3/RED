@@ -6,14 +6,14 @@
 #' @param step numeric indicating the step size (if NULL an optimal step size
 #'   will be used)
 #' @param lambda,sigma numeric indicating the regularization parameters
-#' @param tol numeric indicating the stoping criteria. The algorithm will stop
-#'   when step < tol. Default = 0.001
+#' @param tol numeric indicating the stopping criteria. The algorithm will stop
+#'   when \code{step < tol}. Default = 0.001
 #' @param functional character with the optimization task or function with the
 #'   functional to be used
 #' @param engine character indicating the denoised engine or function with the
 #'   denoiser engine to be used
-#' @param niter numeric indicating the maxistepm number of iterations
-#' @param args arguments to be passed implicity to H HT and f
+#' @param niter numeric indicating the maximum number of iterations
+#' @param args arguments to be passed implicitly to \code{H} \code{HT} and \code{f}
 #'
 #' @export
 #' @examples

@@ -1,10 +1,8 @@
-#' SRI: Super-resolution imaging package
-#'
-#' Super-resolution imaging (SR) is a class of techniques that enhance the resolution of an imaging system.
+#' RED: Regularization by Denoising
 #'
 #' @import imager
 #'
 #' @docType package
-#' @name SRI
+#' @name RED
 NULL
 
