@@ -3,7 +3,6 @@
 #' This function degrades a high resolution image into a low resolution
 #' image. The degradation folows this: bla bla bla
 #'
-#' @export
 #' @param z a cimg object containing the high resolution image
 #' @inheritParams resample
 #' @inheritParams shift
@@ -13,15 +12,17 @@
 #'
 #' @return A degraded cimg object
 #'
+#' @export
 #' @examples
 #' degraded.lenna <- degrade(lenna, L = 4, noise = 0.05, blur = 3)
 #' par(mfrow = c(1,2), mar = c(0,0,1,0)+0.1)
 #' plot(lenna, axes = FALSE, interp = FALSE, main = 'Original Lenna')
 #' plot(degraded.lenna, axes = FALSE, interp = FALSE, main = 'Degraded Lenna')
-degrade <- function(z, L = 1, s = c(0,0), noise = 0, blur = 1, L1 = L, L2 = L){
+degrade <- function(z, L = 1, s = cbind(0,0), noise = 0, blur = 1, L1 = L, L2 = L){
 
+  p <- nrow(s)
   N <- dim(z)
-  M <- round(c(N[1]/L1, N[2]/L2, 1, 1))
+  M <- round(c(N[1]/L1, N[2]/L2, p, 1))
 
   if (is.cimg(noise))
     noise <- noise

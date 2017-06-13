@@ -7,6 +7,9 @@
 #' @return shifted cimg object
 #'
 #' @export
+#' @examples
+#' shift(cameraman, c(1,1))
+#' shift(cameraman, cbind(c(1,1),c(-0.5,0.5)))
 shift <- function(im, s){
   if(is.null(dim(s)))
     s <- rbind(s)
@@ -30,10 +33,12 @@ shift <- function(im, s){
 
 shift.subpx <- function(im, u, v){
   map <- function(x, y){
-    x <- x - u
-    y <- y - v
-    return(list(x = x, y = y))
+    return(list(x = u, y = v))
   }
-  im <- imager::imwarp(im, map = map, direction="backward", interpolation = "cubic", boundary = 'neumann')
+  im <- imager::imwarp(im, map = map,
+                       coordinates = "relative",
+                       direction="backward",
+                       interpolation = "cubic",
+                       boundary = 'neumann')
   return(im)
 }
