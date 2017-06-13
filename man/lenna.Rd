@@ -3,7 +3,7 @@
 \docType{data}
 \name{lenna}
 \alias{lenna}
-\title{Photograp of Lenna}
+\title{Photograph of Lenna}
 \format{an image of class \code{cimg}}
 \usage{
 lenna

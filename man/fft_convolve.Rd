@@ -7,7 +7,7 @@
 fft_convolve(im, filter, deconvolution = FALSE)
 }
 \arguments{
-\item{im, filter}{cimg objects}
+\item{im, filter}{\code{cimg} objects}
 
 \item{deconvolution}{logical indicating if the deconvolution should be performed}
 }
