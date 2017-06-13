@@ -4,7 +4,8 @@
 \alias{degrade}
 \title{Degradation of an image}
 \usage{
-degrade(z, L = 1, s = c(0, 0), noise = 0, blur = 1, L1 = L, L2 = L)
+degrade(z, L = 1, s = cbind(0, 0), noise = 0, blur = 1, L1 = L,
+  L2 = L)
 }
 \arguments{
 \item{z}{a cimg object containing the high resolution image}

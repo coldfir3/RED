@@ -4,21 +4,30 @@
 \alias{RED}
 \title{REgularization by Denoising}
 \usage{
-RED(y, lambda, sigma, mu = NULL, functional = "SR", engine = "MF",
-  niter = 50, args = NULL)
+RED(y, x0 = NULL, lambda = 1, sigma = 1, functional = "SR",
+  engine = "MF", niter = 50, step = NULL, tol = 0.001, args = NULL)
 }
 \arguments{
-\item{y}{cimg object with the low resolution frame(s)}
+\item{y}{cimg object with the observed frame(s)}
+
+\item{x0}{initial guess for the output image, if NULL an educated guess will
+be used. If a custom functional is provided this cant be NULL}
 
 \item{lambda, sigma}{numeric indicating the regularization parameters}
 
-\item{mu}{numeric indicating the step size}
+\item{functional}{character with the optimization task or function with the
+functional to be used}
 
-\item{functional}{character with the optimization task or function with the functional to be used}
+\item{engine}{character indicating the denoised engine or function with the
+denoiser engine to be used}
 
-\item{engine}{character indicating the denoised engine or function with the denoiser engine to be used}
+\item{niter}{numeric indicating the maxistepm number of iterations}
 
-\item{niter}{numeric indicating the maximum number of iterations}
+\item{step}{numeric indicating the step size (if NULL an optimal step size
+will be used)}
+
+\item{tol}{numeric indicating the stoping criteria. The algorithm will stop
+when step < tol. Default = 0.001}
 
 \item{args}{arguments to be passed implicity to H HT and f}
 }
@@ -27,25 +36,50 @@ REgularization by Denoising
 }
 \examples{
 
-y <- degrade(lenna, noise = 0.05)
-x <- RED(y, sigma = 1, lambda = 5, mu = 0.1, 'DN', niter = 10)
+im <- lenna
+y <- degrade(im, noise = 0.05)
+x <- RED(y, sigma = 1, lambda = 5, functional = 'DN', niter = 50)
 par(mfrow = c(1,2), mar = c(0,0,2,0)+0.1)
-plot(y, interp = FALSE, axes = FALSE, main = 'Degraded Lenna')
-mtext(paste(round(PSNR(lenna, y),2), 'dB'), side = 1, line = -2)
-plot(x, interp = FALSE, axes = FALSE, main = 'Restored Lenna')
-mtext(paste(round(PSNR(lenna, x),2), 'dB'), side = 1, line = -2)
+plot(y, interp = FALSE, axes = FALSE, main = 'Degraded im')
+mtext(paste(round(PSNR(im, y),2), 'dB'), side = 1, line = -2)
+plot(x, interp = FALSE, axes = FALSE, main = 'Restored im')
+mtext(paste(round(PSNR(im, x),2), 'dB'), side = 1, line = -2)
 
-y <- degrade(cameraman, blur = 9)
-x <- RED(y, sigma = 0.5, lambda = 4, mu = 0.2, 'DB', niter = 30)
+\dontrun{
+im <- cameraman
+y <- degrade(im, blur = 5)
+y<- isoblur(im, 3, gaussian = TRUE)
+x <- RED(y, sigma = 1, lambda = 4, functional = 'DB', niter = 1500)
 par(mfrow = c(1,2), mar = c(0,0,2,0)+0.1)
-plot(y, interp = FALSE, axes = FALSE, main = 'Degraded cameraman')
-mtext(paste(round(PSNR(cameraman, y),2), 'dB'), side = 1, line = -2)
-plot(x, interp = FALSE, axes = FALSE, main = 'Restored cameraman')
-mtext(paste(round(PSNR(cameraman, x),2), 'dB'), side = 1, line = -2)
+plot(y, interp = FALSE, axes = FALSE, main = 'Degraded image')
+mtext(paste(round(PSNR(im, y),2), 'dB'), side = 1, line = -2)
+plot(x, interp = FALSE, axes = FALSE, main = 'Restored image')
+mtext(paste(round(PSNR(im, x),2), 'dB'), side = 1, line = -2)
 
 im <- cameraman
-s <- cbind(c(0,1,2,-2,1), c(0,-1,2,1,-2))
-y <- as.cimg(array(apply(s, 1, function(s) degrade(im, L = 2, s = s)), c(dim(im)*c(0.5,0.5,5,1))))
-x <- RED(y, sigma = 0.5, lambda = 4, mu = 0.1, functional = 'SR', niter = 30, args = list(scale = 2, s=s))
-# y <- lapply(as.list(as.data.frame(t(s))), z = im, L = 2, s = s)
+L = 2
+s <- cbind(c(0,1,2,-2,1,3,-1,-3,-1), c(0,-1,2,1,-2,-3,3,-2,-3))
+y <- degrade(im, L = L, s = s, noise = 0.05)
+xref <- resize(imsplit(y,'z')[[1]], -100*L, -100*L, interpolation_type = 5)
+x <- RED(y, sigma = 1, lambda = 5, functional = 'SR', niter = 50, args = list(scale = L, s=s))
+par(mfrow = c(1,2), mar = c(0,0,2,0)+0.1)
+plot(xref, interp = FALSE, axes = FALSE, main = 'Bicubic Interpolation')
+mtext(paste(round(PSNR(im, xref),2), 'dB'), side = 1, line = -2)
+plot(x, interp = FALSE, axes = FALSE, main = 'Super Resolved')
+mtext(paste(round(PSNR(im, x),2), 'dB'), side = 1, line = -2)
+
+im0 <- 0.2*pad(cameraman, 256, 'xy')
+im1 <- lenna
+im2 <- im1 - im0
+y1 <- degrade(im1, noise = 0.05)
+y2 <- degrade(im2, noise = 0.05)
+y0 <- y1 - y2
+x0 <- RED(y0, sigma = 1, lambda = 50, functional = 'DN', niter = 100)
+
+par(mfrow = c(1,2), mar = c(0,0,2,0)+0.1)
+plot(y0, interp = FALSE, axes = FALSE, main = 'naive')
+mtext(paste(round(PSNR(im0, y0),2), 'dB'), side = 1, line = -2)
+plot(x0, interp = FALSE, axes = FALSE, main = 'proposed')
+mtext(paste(round(PSNR(im0, x0),2), 'dB'), side = 1, line = -2)
+}
 }
