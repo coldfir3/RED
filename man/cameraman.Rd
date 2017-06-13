@@ -9,6 +9,6 @@
 cameraman
 }
 \description{
-This image is uslay used as benchmar in SR problems
+This image is usualy used as benchmar in SR problems
 }
 \keyword{datasets}

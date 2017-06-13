@@ -9,7 +9,7 @@ fft_convolve(im, filter, deconvolution = FALSE)
 \arguments{
 \item{im, filter}{cimg objects}
 
-\item{deconvolution}{logical indicatinf if the deconvolution should be performed}
+\item{deconvolution}{logical indicating if the deconvolution should be performed}
 }
 \description{
 Convolution of two images via FFT

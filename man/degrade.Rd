@@ -16,10 +16,12 @@ overided by L1 or L2}
 \item{s}{numeric \code{p} by \code{2} matrix containing the registration
 sameters}
 
-\item{noise}{numeric indicating the standard deviation of the noise or an cimg object that will be added to the resampled z}
+\item{noise}{numeric indicating the standard deviation of the noise or an
+cimg object that will be added to the resampled z}
 
-\item{blur}{numeric indicating the blur range (for uniform blur) or an cimg object with the blur kernel to be convolved with z
-if nothing is provided an default kernel will be used.}
+\item{blur}{numeric indicating the blur range (for uniform blur) or an cimg
+object with the blur kernel to be convolved with z if nothing is provided
+an default kernel will be used.}
 
 \item{L1}{numeric indicating the directional scale change}
 
@@ -29,8 +31,7 @@ if nothing is provided an default kernel will be used.}
 A degraded cimg object
 }
 \description{
-This function degrades a high resolution image into a low resolution
-image. The degradation folows this: bla bla bla
+This function degrades a high resolution image into a low resolution image.
 }
 \examples{
 degraded.lenna <- degrade(lenna, L = 4, noise = 0.05, blur = 3)

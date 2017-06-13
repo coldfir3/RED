@@ -2,7 +2,7 @@
 % Please edit documentation in R/registration.R
 \name{register}
 \alias{register}
-\title{Registration parameter}
+\title{Registration parameter estimation}
 \usage{
 register(src, tar, method = "taylor", par0 = c(0, 0, 0), verbosity = 2,
   ...)
@@ -19,10 +19,10 @@ register(src, tar, method = "taylor", par0 = c(0, 0, 0), verbosity = 2,
 \item{...}{parameters to be passed to the optimization algorithm}
 }
 \value{
-bla bla
+the registration parameters, usualy a 2d vector.
 }
 \description{
-Registration parameter
+Registration parameter estimation
 }
 \examples{
 
