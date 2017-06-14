@@ -11,7 +11,7 @@ Description: Regularization by Denoising uses a denoising engine to solve
   only the median filter is implemented as a denoiser engine. However,
   (almost) any denoiser engine can be plugged in. There are currently available
   3 reconstruction tasks: Denoise, deblurr and super-resolution. And again,
-  any other task can be easlly plugged into the main function 'RED'.
+  any other task can be easily plugged into the main function 'RED'.
 Depends: R (>= 3.4.0), imager
 License: GPL-3
 Encoding: UTF-8
