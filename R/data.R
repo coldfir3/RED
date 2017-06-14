@@ -1,4 +1,4 @@
-#' Photograp of a cameraman
+#' Photograph of a cameraman
 #'
 #' This image is usually used as benchmark in SR problems
 #'

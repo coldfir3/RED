@@ -6,7 +6,7 @@
 #' @param verbosity Numeric indicating the level of verbosity is displayed
 #' @param ... parameters to be passed to the optimization algorithm
 #'
-#' @return the registration parameters, usualy a 2d vector.
+#' @return the registration parameters, usually a 2d vector.
 #'
 #' @export
 #' @examples

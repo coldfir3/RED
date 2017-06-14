@@ -10,7 +10,7 @@ Description: Regularization by Denoising uses a denoising engine to solve
   only the gradient descent optimization framework is implemented. Also,
   only the median filter is implemented as a denoiser engine. However,
   (almost) any denoiser engine can be plugged in. There are currently available
-  3 reconstruction tasks: Denoise, deblurr and super-resolution. And again,
+  3 reconstruction tasks: denoise, deblur and super-resolution. And again,
   any other task can be easily plugged into the main function 'RED'.
 Depends: R (>= 3.4.0), imager
 License: GPL-3
