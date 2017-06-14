@@ -19,7 +19,7 @@ register(src, tar, method = "taylor", par0 = c(0, 0, 0), verbosity = 2,
 \item{...}{parameters to be passed to the optimization algorithm}
 }
 \value{
-the registration parameters, usualy a 2d vector.
+the registration parameters, usually a 2d vector.
 }
 \description{
 Registration parameter estimation

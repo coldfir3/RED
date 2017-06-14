@@ -1,7 +1,7 @@
 #' Resampling of an image
 #'
 #' @param im \code{cimg} object
-#' @param L numeric indicating the overall scale change. This param will be
+#' @param L numeric indicating the overall scale change. This parameter will be
 #'   override by L1 or L2
 #' @param L1,L2 numeric indicating the directional scale change
 #'

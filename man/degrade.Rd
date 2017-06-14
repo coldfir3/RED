@@ -10,7 +10,7 @@ degrade(z, L = 1, s = cbind(0, 0), noise = 0, blur = 1, L1 = L,
 \arguments{
 \item{z}{a \code{cimg}object containing the high resolution image}
 
-\item{L}{numeric indicating the overall scale change. This param will be
+\item{L}{numeric indicating the overall scale change. This parameter will be
 override by L1 or L2}
 
 \item{s}{numeric \code{p} by \code{2} matrix containing the registration

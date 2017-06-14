@@ -10,7 +10,7 @@ transform(im, s)
 \item{im}{\code{cimg} object}
 
 \item{s}{numeric \code{1} by \code{3} vector containing the registration
-sameters}
+parameters}
 }
 \value{
 shifted \code{cimg} object

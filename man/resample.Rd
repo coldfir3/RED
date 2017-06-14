@@ -9,7 +9,7 @@ resample(im, L = 1, L1 = L, L2 = L)
 \arguments{
 \item{im}{\code{cimg} object}
 
-\item{L}{numeric indicating the overall scale change. This param will be
+\item{L}{numeric indicating the overall scale change. This parameter will be
 override by L1 or L2}
 
 \item{L1, L2}{numeric indicating the directional scale change}
