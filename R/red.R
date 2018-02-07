@@ -166,10 +166,15 @@ RED <- function(y, x0 = NULL, lambda = 1, sigma = 1, functional = 'SR', engine =
       step <- step/2
       x <- x + step*grad
     }
-    else if(step_iter)
+    else if(step_iter){
+      if(abs(loss[1] - loss[2]) < tol)
+        break
       step <- 1.1*step
+      }
     if(step < tol)
       break
+
+
 
     cat("\niteration:", n, "of", niter, "(max) | step size:", round(step,3),
         "| Loss:", round(loss[1]/utils::tail(loss,1),3),
